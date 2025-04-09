@@ -23,9 +23,19 @@ function pop_up() {
         setTimeout(show_clock, 1000); //1초마다 갱신
         }
 
-    function over(obj) {
-        obj.src="image/LOGO.png";
-    }
-    function out(obj) {
-        obj.src="image/LOGO_2.jpg"
-    }
+    // function over(obj) {
+    //     obj.src="image/LOGO.png";
+    // }
+    // function out(obj) {
+    //     obj.src="image/LOGO_2.jpg"
+    // }
+
+    const over = (obj) => {
+        obj.src = "image/LOGO.png";
+        };
+    const out = (obj) => {
+        obj.src = "image/LOGO_2.jpg"
+    };
+        
+
+    

@@ -7,3 +7,4 @@ This project is a starting point for a Web application
 ## 3주차 수업 부트스트랩 적용 완료! (연습문제 포함)
 ## 4주차 수업 자바스크립트 적용 완료! (연습문제 포함)
 ## 5주차 수업 팝업 및 검색(구글) 적용 완료! (연습문제 포함)
+## 6주차
