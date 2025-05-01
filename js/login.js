@@ -35,32 +35,29 @@ const check_input = () => {
         alert('비밀번호를 입력하세요.');
         return false;
     }
-    if (emailValue.length < 5) {
-        alert('아이디는 최소 5글자 이상 입력해야 합니다.');
+    // if (emailValue.length < 5) {
+    //     alert('아이디는 최소 5글자 이상 입력해야 합니다.');
+    //     return false;
+    // }
+    if (emailValue.length < 5 || emailValue.length > 10) {
+        alert('아이디는 5~10글자의 형식을 유지해야합니다');
         return false;
     }
-    if (emailValue.length > 11) {
-        alert('아이디는 최대 10글자로 제한됩니다');
-        return false;
-    }
-    if (passwordValue.length < 12) {
-        alert('비밀번호는 반드시 12글자 이상 입력해야 합니다.');
-        return false;
-    }
-    if (passwordValue.length > 16) {
-        alert('비밀번호는 최대 15글자로 제한됩니다.');
+    if (passwordValue.length < 12 || passwordValue.length > 15) {
+        alert('비밀번호는 반드시 12~15글자의 형식을 유지해야 합니다.');
         return false;
     }
     if (!sanitizedEmail || !sanitizedPassword) {
         return false;
     }
 
-    // 반복되는 문자열 3글자 이상 금지 (예: aaa, 123123, 아이디아이디)
-    const repeatThreePattern = /(.{3,})\1+/;
+    // 3글자 이상 동일 문자 반복 금지
+    const repeatThreePattern = /(.)\1{2,}/;
     if (repeatThreePattern.test(emailValue)) {
-        alert('아이디에 동일한 3글자 이상 반복 입력은 허용되지 않습니다.');
-        return false;
+    alert('아이디에 동일한 문자가 3번 이상 반복되면 안 됩니다.');
+    return false;
     }
+
 
     // 연속된 숫자 2자리 이상이 반복될 경우 금지 (예: 12아이디12)
     const numberRepeatPattern = /(\d{2,})[a-zA-Z가-힣]*\1/;
@@ -90,3 +87,9 @@ const check_input = () => {
 };
 
 document.getElementById("login_btn").addEventListener('click', check_input);
+//개인적으로 추가구현한 엔터키로 로그인(9주차)
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        check_input();
+    }
+});
