@@ -1,4 +1,3 @@
-
     function show_clock(){
         let currentDate = new Date(); // 현재 시스템 날짜 객체 생성
         let divClock = document.getElementById('divClock');
