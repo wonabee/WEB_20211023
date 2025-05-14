@@ -54,6 +54,7 @@ function init_logined() {
     }
 }
 
+//11주차 추가문제
 function logout() {
     localStorage.setItem("isLoggedOut", "true");
     session_del(); //기존세션삭제
