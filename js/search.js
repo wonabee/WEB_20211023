@@ -52,3 +52,7 @@ function googleSearch() {
     window.open(googleSearchUrl, "_blank");
     return false;
 }
+
+window.googleSearch = googleSearch;
+
+

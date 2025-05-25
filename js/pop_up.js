@@ -68,5 +68,6 @@
         obj.src = "image/LOGO_2.jpg"
     };
         
+    window.pop_up = pop_up;
 
     

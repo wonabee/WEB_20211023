@@ -33,3 +33,5 @@ function decrypt_text_cbc(){
     const decrypted = decodeByAES256(rk, eb);
     console.log("(CBC) 복호화된 값:", decrypted);
 } 
+
+export { encrypt_text_cbc as encrypt_text, decrypt_text_cbc as decrypt_text };

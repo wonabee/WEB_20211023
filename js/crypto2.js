@@ -53,3 +53,5 @@ async function decrypt_text_gcm() {
         console.error("복호화 실패:", e);
     }
 }
+
+export { encrypt_text_gcm as encrypt_text, decrypt_text_gcm as decrypt_text };

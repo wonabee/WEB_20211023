@@ -1,3 +1,8 @@
+import { session_set, session_get, session_check } from './session.js';
+import { encrypt_text as encrypt_text_cbc, decrypt_text as decrypt_text_cbc } from './crypto.js';
+import { encrypt_text as encrypt_text_gcm, decrypt_text as decrypt_text_gcm } from './crypto2.js';
+import { generateJWT, checkAuth } from './jwt_token.js';
+
 const check_xss = (input) => {
     const DOMPurify = window.DOMPurify;
     const sanitizedInput = DOMPurify.sanitize(input);
@@ -8,38 +13,38 @@ const check_xss = (input) => {
     return sanitizedInput;
 };
 
-function session_check() {
-    if (window.location.pathname.includes('index_login.html')) {
-        if (localStorage.getItem("isLoggedOut") === "true") {
-            localStorage.removeItem("isLoggedOut");
-            return;
-        }
-        if (sessionStorage.getItem("Session_Storage_test")) {
-            alert("이미 로그인 되었습니다.");
-            location.href = '../login/index_login.html';
-        }
-    }
-}
+// function session_check() {
+//     if (window.location.pathname.includes('index_login.html')) {
+//         if (localStorage.getItem("isLoggedOut") === "true") {
+//             localStorage.removeItem("isLoggedOut");
+//             return;
+//         }
+//         if (sessionStorage.getItem("Session_Storage_test")) {
+//             alert("이미 로그인 되었습니다.");
+//             location.href = '../login/index_login.html';
+//         }
+//     }
+// }
 
-async function session_set() {
-    let session_id = document.querySelector("#typeEmailX");
-    let session_pass = document.querySelector("#typePasswordX");
-    if (sessionStorage) {
-        const en_text2 = await encrypt_text_gcm(session_pass.value); // Web Crypto AES-GCM 암호화
-        const en_text1 = encrypt_text_cbc(session_pass.value); // CryptoJS AES-CBC 암호화
-        sessionStorage.setItem("Session_Storage_id", session_id.value);
-        sessionStorage.setItem("Session_Storage_pass", en_text1);
-        sessionStorage.setItem("Session_Storage_pass2", en_text2);
-    } else {
-        alert("로컬 스토리지 지원 x");
-    }
-}
+// async function session_set() {
+//     let session_id = document.querySelector("#typeEmailX");
+//     let session_pass = document.querySelector("#typePasswordX");
+//     if (sessionStorage) {
+//         const en_text2 = await encrypt_text_gcm(session_pass.value); // Web Crypto AES-GCM 암호화
+//         const en_text1 = encrypt_text_cbc(session_pass.value); // CryptoJS AES-CBC 암호화
+//         sessionStorage.setItem("Session_Storage_id", session_id.value);
+//         sessionStorage.setItem("Session_Storage_pass", en_text1);
+//         sessionStorage.setItem("Session_Storage_pass2", en_text2);
+//     } else {
+//         alert("로컬 스토리지 지원 x");
+//     }
+// }
 
 function session_del() {
     if (sessionStorage) {
         sessionStorage.removeItem("Session_Storage_test");
         sessionStorage.clear();
-        alert('로그아웃 버튼 클릭 확인 : 세션 스토리지를 삭제합니다.');
+        alert('로그아웃: 세션 삭제 완료');
     } else {
         alert("세션 스토리지 지원 x");
     }
@@ -54,14 +59,12 @@ function init_logined() {
     }
 }
 
-//11주차 추가문제
 function logout() {
     localStorage.setItem("isLoggedOut", "true");
-    session_del(); //기존세션삭제
-    localStorage.removeItem("jwt_token"); //JWT토큰삭제
-    location.href = '../index.html'; //메인페이지 이동
+    session_del();
+    localStorage.removeItem("jwt_token");
+    location.href = '../index.html';
 }
-
 
 function login_failed() {
     let failCount = parseInt(getCookie('login_failed_cnt')) || 0;
@@ -69,7 +72,7 @@ function login_failed() {
     setCookie('login_failed_cnt', failCount, 1);
     alert(`로그인 실패 횟수: ${failCount}`);
     if (failCount >= 3) {
-        alert("로그인 3회 이상 실패. 로그인이 제한됩니다.");
+        alert("로그인 3회 이상 실패. 제한됩니다.");
         const loginBtn = document.getElementById("login_btn");
         if (loginBtn) loginBtn.disabled = true;
     }
@@ -97,7 +100,7 @@ function setCookie(name, value, expiredays) {
 
 function getCookie(name) {
     var cookie = document.cookie;
-    console.log("쿠키를 요청합니다.");
+    console.log("쿠키 요청");
     if (cookie !== "") {
         var cookie_array = cookie.split("; ");
         for (var index in cookie_array) {
@@ -111,20 +114,26 @@ function getCookie(name) {
 function init() {
     const emailInput = document.getElementById('typeEmailX');
     const idsave_check = document.getElementById('idSaveCheck');
-    
+
+    if (!emailInput || !idsave_check) {
+        console.warn("필수 입력 요소가 없습니다. init() 중단");
+        return;
+    }
+
     const payload = {
-        id: emailInput.value, // ✅ 수정된 부분
+        id: emailInput.value,
         exp: Math.floor(Date.now() / 1000) + 3600
     };
     const jwtToken = generateJWT(payload);
-    localStorage.setItem('jwt_token', jwtToken); // 저장도 init 안에서 해주면 좋음
+    localStorage.setItem('jwt_token', jwtToken);
 
     let get_id = getCookie("id");
     if (get_id && emailInput) {
         emailInput.value = get_id;
         idsave_check.checked = true;
     }
-    session_check();
+
+    session_check(); // 세션 및 토큰 검사
 }
 
 const check_input = async () => {
@@ -132,7 +141,7 @@ const check_input = async () => {
     const emailInput = document.getElementById('typeEmailX');
     const passwordInput = document.getElementById('typePasswordX');
     const idsave_check = document.getElementById('idSaveCheck');
-    alert('아이디, 패스워드를 체크합니다');
+    alert('아이디와 비밀번호를 확인 중');
 
     const emailValue = emailInput.value.trim();
     const passwordValue = passwordInput.value.trim();
@@ -140,57 +149,58 @@ const check_input = async () => {
     const sanitizedPassword = check_xss(passwordValue);
 
     if (!emailValue || !passwordValue || !sanitizedEmail || !sanitizedPassword) {
-        alert('이메일과 비밀번호를 모두 입력하세요.');
+        alert('입력값 부족');
         login_failed();
         return false;
     }
 
     if (emailValue.length < 5 || emailValue.length > 10) {
-        alert('아이디는 5~10글자의 형식을 유지해야합니다');
+        alert('아이디는 5~10자의 조건을 만족해야합니다');
         login_failed();
         return false;
     }
     if (passwordValue.length < 12 || passwordValue.length > 15) {
-        alert('비밀번호는 반드시 12~15글자의 형식을 유지해야 합니다.');
+        alert('비밀번호는 12~15자의 조건을 만족해야합니다.');
         login_failed();
         return false;
     }
     if (/(.)\1{2,}/.test(emailValue)) {
-        alert('아이디에 동일한 문자가 3번 이상 반복되면 안 됩니다.');
+        alert('아이디에 동일 문자 3회 이상이면 안됩니다.');
         login_failed();
         return false;
     }
     if (/(\d{2,})[a-zA-Z가-힣]*\1/.test(emailValue)) {
-        alert('아이디에 연속된 숫자 2자리 이상이 반복되면 안 됩니다.');
+        alert('아이디에 연속된 숫자 반복 불가합니다.');
         login_failed();
         return false;
     }
     if (!/[A-Z]/.test(passwordValue) || !/[a-z]/.test(passwordValue)) {
-        alert('패스워드는 대소문자를 1개 이상 포함해야 합니다.');
+        alert('비밀번호에 대소문자 포함 필요합니다.');
         login_failed();
         return false;
     }
     if (!/[!,@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(passwordValue)) {
-        alert('패스워드는 특수문자를 1개 이상 포함해야 합니다.');
+        alert('비밀번호에 특수문자 필요합니다.');
         login_failed();
         return false;
     }
 
     if (idsave_check.checked) {
-    alert(`쿠키를 저장합니다. 값: ${emailValue}`);
-    setCookie("id", emailValue, 1);
-} else {
-    setCookie("id", emailValue, 0);
-}
-
+        alert(`쿠키 저장: ${emailValue}`);
+        setCookie("id", emailValue, 1);
+    } else {
+        setCookie("id", emailValue, 0);
+    }
 
     console.log('이메일:', emailValue);
     console.log('비밀번호:', passwordValue);
     login_count(emailValue);
-    // session_set(); // 세션 생성
-    // localStorage.setItem('jwt_token', jwtToken);
+
+    sessionStorage.setItem("Session_Storage_test", emailValue); // 세션 ID 저장
     sessionStorage.setItem("Session_Storage_pass", passwordValue);
     await session_set();
+
+    //아래코드 주석처리하면, 콘솔에서 CBC GBC 복호화 볼 수 있음
     loginForm.submit();
 };
 
@@ -208,13 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const loginBtn = document.getElementById("login_btn");
         if (loginBtn) {
             loginBtn.disabled = true;
-            alert(`현재 로그인 제한 상태입니다. 실패 횟수: ${failCount}`);
+            alert(`로그인 제한 중: ${failCount}회 실패`);
         }
     }
+
     const loginBtn = document.getElementById("login_btn");
-    if (loginBtn) {
-        loginBtn.addEventListener('click', check_input);
-    }
+    if (loginBtn) loginBtn.addEventListener('click', check_input);
+
     const logoutBtn = document.getElementById("logout_btn");
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
@@ -223,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             logout();
         });
     }
+
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             const userId = document.getElementById("typeEmailX").value.trim();
@@ -230,4 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
             check_input();
         }
     });
+
+    // 로그인 페이지에서만 init 실행
+    if (document.getElementById('typeEmailX') && document.getElementById('idSaveCheck')) {
+        init();
+    }
 });
