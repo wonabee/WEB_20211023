@@ -22,16 +22,18 @@ function encrypt_text_cbc(password){
     return encodeByAES256(rk, password);
 }
 
-function decrypt_text_cbc(){
+function decrypt_text_cbc(encrypted) {
     const k = "key";
     const rk = k.padEnd(32, " ");
-    const eb = sessionStorage.getItem("Session_Storage_pass");
+    const eb = encrypted || sessionStorage.getItem("Session_Storage_pass_cbc");
     if (!eb) {
-        console.warn("Session_Storage_pass 값이 없습니다.");
+        console.warn("Session_Storage_pass_cbc 값이 없습니다.");
         return;
     }
     const decrypted = decodeByAES256(rk, eb);
-    console.log("(CBC) 복호화된 값:", decrypted);
-} 
+    return decrypted;
+}
+
+
 
 export { encrypt_text_cbc as encrypt_text, decrypt_text_cbc as decrypt_text };

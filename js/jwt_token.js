@@ -59,7 +59,7 @@ function checkAuth() { // 인증 검사 수행
     }
 }
 
-// ✅ HTML에서 checkAuth()를 호출할 수 있도록 전역 등록
+//HTML에서 checkAuth()를 호출할 수 있도록 전역 등록
 window.checkAuth = checkAuth;
 
-export { generateJWT, checkAuth };
+export { generateJWT, verifyJWT, checkAuth, isAuthenticated };

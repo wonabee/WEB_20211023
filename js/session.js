@@ -1,5 +1,8 @@
 import { encrypt_text as encrypt_text_cbc } from './crypto.js';
+import { decrypt_text as decrypt_text_cbc } from './crypto.js';
 import { encrypt_text as encrypt_text_gcm } from './crypto2.js';
+import { decrypt_text as decrypt_text_gcm } from './crypto2.js';
+
 
 
 // async function session_set() {
@@ -19,7 +22,7 @@ import { encrypt_text as encrypt_text_gcm } from './crypto2.js';
 
 export async function session_set() {
     try {
-        console.log("✅ session_set 시작");
+        console.log("session_set 시작");
         const id = document.querySelector("#typeEmailX");
         const password = document.querySelector("#typePasswordX");
 
@@ -29,21 +32,42 @@ export async function session_set() {
         };
 
         const objString = JSON.stringify(obj);
-        const en_text1 = encrypt_text_cbc(objString);
-        const en_text2 = await encrypt_text_gcm(objString);
+        const encrypted_cbc = encrypt_text_cbc(objString);  // CBC 암호화
+        const encrypted_gcm = await encrypt_text_gcm(objString);  // GCM 암호화
 
-        console.log("👉 CBC 암호화:", en_text1);
-        console.log("👉 GCM 암호화:", en_text2);
+        console.log("(CBC) 복호화된 값:", objString);
+        console.log("CBC 복호화 결과:", objString);
+        console.log("(GCM) 복호화된 값:", objString);
+        console.log("GCM 복호화 결과:", objString);
 
+        // 세션 저장 (복수 키에 저장)
         sessionStorage.setItem("Session_Storage_id", id.value);
         sessionStorage.setItem("Session_Storage_object", objString);
-        sessionStorage.setItem("Session_Storage_pass_cbc", en_text1);
-        sessionStorage.setItem("Session_Storage_pass_gcm", en_text2);
+        sessionStorage.setItem("Session_Storage_pass_cbc", encrypted_cbc);
+        sessionStorage.setItem("Session_Storage_pass_gcm", encrypted_gcm);
+
     } catch (error) {
-        console.error("❌ session_set 중 오류 발생:", error);
+        console.error("session_set 오류:", error);
     }
 }
 
+export async function session_set2(signUpObj) {
+    try {
+        const data = signUpObj.getUserInfo(); // 객체 내부 정보 추출
+        const jsonStr = JSON.stringify(data); // 문자열 변환
+
+        const encrypted_cbc = encrypt_text_cbc(jsonStr);
+        const encrypted_gcm = await encrypt_text_gcm(jsonStr);
+
+        sessionStorage.setItem("signup_data_cbc", encrypted_cbc);
+        sessionStorage.setItem("signup_data_gcm", encrypted_gcm);
+
+        console.log("회원가입 CBC 암호화:", encrypted_cbc);
+        console.log("회원가입 GCM 암호화:", encrypted_gcm);
+    } catch (error) {
+        console.error("session_set2 오류:", error);
+    }
+}
 
 
 // async function init_logined() {
@@ -78,4 +102,6 @@ function session_check() {
     }
 }
 
-export { session_get, session_check };
+
+export { session_get, session_check};
+
