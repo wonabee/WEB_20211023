@@ -1,7 +1,15 @@
-import { session_set, session_get, session_check } from './session.js';
 import { encrypt_text as encrypt_text_cbc, decrypt_text as decrypt_text_cbc } from './crypto.js';
 import { encrypt_text as encrypt_text_gcm, decrypt_text as decrypt_text_gcm } from './crypto2.js';
 import { generateJWT, checkAuth } from './jwt_token.js';
+import {
+  session_set,
+  session_set2,
+  session_get,
+  session_check,
+  decrypt_signup_info_if_exists
+} from './session.js';
+
+
 
 const check_xss = (input) => {
     const DOMPurify = window.DOMPurify;
@@ -219,7 +227,7 @@ const check_input = async () => {
         setCookie("id", emailValue, 0);
     }
 
-    console.log("🟡 check_input 실행됨");
+    console.log("check_input 실행됨");
     console.log('이메일:', emailValue);
     console.log('비밀번호:', passwordValue);
     login_count(emailValue);
@@ -227,11 +235,13 @@ const check_input = async () => {
     sessionStorage.setItem("Session_Storage_test", emailValue);
     sessionStorage.setItem("Session_Storage_pass", passwordValue);
 
-    console.log("🟢 session_set 호출 직전");
+    await decrypt_signup_info_if_exists();
+    console.log("session_set 호출 직전");
     await session_set();
-    console.log("✅ session_set 호출 완료");
+    console.log("session_set 호출 완료");
 
     await init_logined();
+    
 
     // loginForm.submit(); // 필요 시 주석 해제
 };

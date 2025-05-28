@@ -1,4 +1,5 @@
 import { session_set } from './session.js';
+import { session_set2 } from './session.js';
 
 function join() { // 회원가입 기능
     const nameRegex = /^[가-힣]+$/;
@@ -52,9 +53,8 @@ function join() { // 회원가입 기능
         return;
     }
 
-    // ✅ 모든 조건을 통과한 후에만 실행됨
     const newSignUp = new SignUp(name.value, email.value, password.value, re_password.value);
-    session_set(newSignUp);
+    session_set2(newSignUp);
 
     form.action = "../index.html";
     form.method = "get";
