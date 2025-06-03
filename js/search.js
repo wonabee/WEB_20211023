@@ -19,8 +19,6 @@ document.getElementById("search_button_msg").addEventListener('click', search_me
 함수가 중첩될 시 에러가 나는 것이 아닌 나중에 입력된 함수가 실행됨
 (나중에 입력된 함수가 우선순위임)
 
-※ 아래 함수들은 참고용 주석입니다. 실제로 코드에 포함되지 않습니다.
-
 function search_message(){
     alert("검색을 수행ㅋ");
 } 

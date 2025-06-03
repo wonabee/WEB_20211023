@@ -29,11 +29,11 @@
 
          <script>
             function out(img) {
-            img.src = "image/LOGO_2.jpg"; // 마우스를 올렸을 때 이미지 변경
+            img.src = "../image/LOGO_2.jpg"; // 마우스를 올렸을 때 이미지 변경
          }
 
             function over(img) {
-             img.src = "image/LOGO.png"; // 마우스를 내렸을 때 이미지 복원
+             img.src = "../image/LOGO.png"; // 마우스를 내렸을 때 이미지 복원
          }
 </script>
         <title>크레이지 아케이드 메인화면_지어니가 만들어따</title>
@@ -53,28 +53,34 @@
             </h3>
             </div>  -->
         <!--3주차 추가문제(구현완료)-->
-            <nav class="navbar navbar-expand-lg" style="background-color: yellow;"> <div class="container-fluid"> <img src="image/LOGO.png" width="120" height="70" onmouseover="out(this)" onmouseout="over(this)">
+            <nav class="navbar navbar-expand-lg" style="background-color: yellow;"> <div class="container-fluid"> <img src="image/LOGO.png" width="150" height="70" onmouseover="out(this)" onmouseout="over(this)">
                 <!--img src="image/LOGO.png" width="120" height="70" onmouseover="out(this)" onmouseout="over(this)"
             원래는 이 코드이지만 image/LOGO.png위에 올리면 image/LOGO_2.png로 바뀌고 올리지 않으면 image/LOGO.png로 돌아오도록 개인수정함--><a class="navbar-brand" href="#"> 홈페이지 테스트
                 </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"> </span>
                 </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent"> <ul class="navbar-nav me-auto mb-2 mb-lg-0"> <li class="nav-item"> <a class="nav-link active" aria-current="page" href="#"> 메인페이지
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent"> <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
+                        <!-- 공통 적용 -->
+<li class="nav-item">
+                            <a class="nav-link" href="login/profile.html" target='_blank'>프로필</a>
+                        </li>
+
+<li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/Info/Game" target="_blank"> 기본정보
                         </a>
                         </li>
-                            <li class="nav-item"> <a class="nav-link" href="#"> 기본정보
+                            <li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/Info/Game" target="_blank"> 기본정보
                         </a>
                         </li>
-                            <li class="nav-item"> <a class="nav-link" href="#"> 챔피언
+                            <li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/Ranking/CAJJang" target="_blank"> 랭킹
                         </a>
                         </li>
-                            <li class="nav-item"> <a class="nav-link" href="#"> 패치
+                            <li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/News/Event/List" target="_blank"> 이벤트
                         </a>
                         </li>
-                            <li class="nav-item"> <a class="nav-link" href="#"> 노트
+                            <li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/Free/List" target="_blank"> 게시판
                         </a>
                         </li>
-                            <li class="nav-item"> <a class="nav-link" href="#"> 새소식
+                            <li class="nav-item"> <a class="nav-link" href="https://ca.nexon.com/News/Monthly/List" target="_blank"> 월간크아
                         </a>
                         </li>
                             <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 고객지원
@@ -164,3 +170,4 @@
             </h3>
         </div>
     </body>
+    </html>

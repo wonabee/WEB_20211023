@@ -36,6 +36,7 @@ async function session_set() {
         sessionStorage.setItem("Session_Storage_object", objString);
         sessionStorage.setItem("Session_Storage_pass_cbc", encrypted_cbc);
         sessionStorage.setItem("Session_Storage_pass_gcm", encrypted_gcm);
+        
 
         // 저장 확인 로그
         console.log("세션 저장됨: Session_Storage_id =", sessionStorage.getItem("Session_Storage_id"));
