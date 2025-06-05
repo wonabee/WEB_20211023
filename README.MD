@@ -132,12 +132,14 @@ This project is a starting point for a Web application
    - 개인 사진을 삽입함
    - 기술 스택 : 개인 스킬로 수정하여 프로필 이미지 내용을 완성함
  - 프로필 페이지 접근 제한 구현 완료
-   - localStorage에 jwt_token이 있을 때만 profile.html을 볼 수 있도록 추가 구현함. 따라서 index.html
-     에서 프로필 버튼을 눌렀을 때 바로 볼 수 없고, "로그인 후 이용해주세요"라는 팝업과 login.html로 로드됨. 또한
-     VSCODE에서 profile.html을 실행했을 때도 화면을 바로 볼 수 없도록 구현 완료함
+   - Session에 로그인 정보가 있을 때만, profile.html에 접근이 가능하도록 구현 완료함.
+     VSCODE에서 profile.html을 실행했을 때도 화면을 볼 수 없도록 구현함. 또한, index.html에서도 프로필 버튼을 눌렀을 때 바로 볼 수 없고, "로그인 후 이용해주세요"라는 팝업과 login.html로 로드됨. 결국 index.html에서 로그인 이후, index_login.html로 로드 된 이후 세션에 기록이 있을 때 프로필 버튼을 눌러야만 profile.html의 내용을 볼 수 있음
  - 카카오 맵 - 좌표로 주소 출력하기 구현 완료함
    - map.js에 추가로 작성하여 클릭했을 때의 지역과 마커에도 주소를 출력하도록 구현 완료함
 *교수님꼐서 주신 자료의 추가문제 이외에 추가적으로 구현한 내용 (아래내용)
  - profile.html의 "지도를 클릭해주세요!" 위에 클릭한 부분이 지역 어디인지를 시각적으로 잘 보이도록 표현 완료함.
    ex: 경기도 안양시 만안구 안양8동
  - 지도 기본 화면이 "이태원동"이 아닌 "성결대학교"로 수정함
+ - 최종보고서 제출 전 https://prettydiff.com/tool.xhtml 사이트를 이용해 코드를 정렬 완료함
+ - session에 회원가입 정보를 저장하여, 회원가입을 한 내용이 있을 때만 로그인이 가능하도록 구현함. 
+   (session에 저장하여 탭을 닫으면 회원가입 정보가 사라짐. local에 구현하는 것이 해결책일 것이라는 생각이 듦)
